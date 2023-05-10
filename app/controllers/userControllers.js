@@ -3,6 +3,7 @@ const db = require("../models");
 const jwt = require("jsonwebtoken");
 const User = db.users;
 
+
 const signup = async (req, res) => {
   try {
     const username = await User.findOne({
@@ -18,7 +19,7 @@ const signup = async (req, res) => {
         password: await bcrypt.hash(password, 10)
       };
       user = await User.create(data);
-      const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: "5m" })
+      const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: "10m" })
       res.status(201).json({ user, token, message: "the user has been inserted successfully" });
     } else {
       console.log("This user exists");
@@ -40,7 +41,6 @@ const login = async (req, res) => {
       }
     });
     if (user) {
-
       bcrypt.compare(password, user.password, (req, match) => {
         if (match == true) {
           console.log(password, user.password)
@@ -59,21 +59,23 @@ const login = async (req, res) => {
     res.status(500).json({ success: false, message: error });
   }
 };
-const findAll = async (req, res) => {
-  const userName = req.query.userName;
+const findAll = async (req, res) => 
+{
+  const userName = req.body.userName;
   var condition = userName ? { userName: { [Op.iLike]: `%${userName}%` } } : null;
-
   const result = await User.findAll({ where: condition }).catch(err => {
     res.status(500).send({
       message:
         err.message || "An error occurred while retrieving users."
     });
   });
-  res.send(result);
-
+  res.status(201).json({ result });
 }
+
+
 module.exports = {
   signup,
   login,
   findAll,
+
 };
