@@ -11,14 +11,15 @@ const signup = async (req, res) => {
       },
     });
     if (!username) {
-      const { userName, password, email } = req.body;
+      const { userName, password, email, role } = req.body;
       const data = {
         userName,
         email,
+        role,
         password: await bcrypt.hash(password, 10)
       };
       user = await User.create(data);
-      const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: "5m" })
+      const token = jwt.sign({ id: user.id,role:user.role }, process.env.secretKey, { expiresIn: "5m" })
       res.status(201).json({ user, token, message: "the user has been inserted successfully" });
     } else {
       console.log("This user exists");
@@ -40,11 +41,10 @@ const login = async (req, res) => {
       }
     });
     if (user) {
-
       bcrypt.compare(password, user.password, (req, match) => {
         if (match == true) {
           console.log(password, user.password)
-          const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: "5m" })
+          const token = jwt.sign({ id: user.id, role:user.role }, process.env.secretKey, { expiresIn: "5m" })
           res.status(201).json({ user, token, message: "Authentication success" });
         } else if (match == false) {
           console.log(match)
@@ -71,9 +71,28 @@ const findAll = async (req, res) => {
   });
   res.send(result);
 
+};
+const deleteusers = async (req,res) => {
+  try{
+  const userName = req.body;
+  await User.destroy({
+    where:{
+      userName:req.body.userName
+    }
+  }).then(num =>{
+    if (num == 1) {
+      res.status(201).json({message: "The department was successfully deleted"});
+    } else {
+      res.status(409).json({message: "could not be deleted because the user does not exist"});
+    }
+  })
+}catch(err){
+  res.status(500).json({ success: false, message: err });
 }
+};
 module.exports = {
   signup,
   login,
   findAll,
+  deleteusers,
 };
