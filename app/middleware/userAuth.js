@@ -18,7 +18,7 @@ module.exports = verifyToken;
 */
 function isAuth(req, res, next) {
   if (!req.headers.authorization) {
-    return res.status(403).send({ message: "NOT AUTHORIZED" })
+    return res.status(403).json({ message: "NOT AUTHORIZED" })
   }
   try {
     const token = req.headers.authorization.split(" ")[1]
@@ -26,10 +26,10 @@ function isAuth(req, res, next) {
     const payload = jwt.verify(token, process.env.secretKey)
     req.user = payload.sub
     next();
+    
     }else if(!token){
     res.status(401).json({message:"Token not found "})
     }
-    
   } catch (err) {
     return res.status(401).json({ status: "fail", message: "Invalid Token,not Authorized" });
   }

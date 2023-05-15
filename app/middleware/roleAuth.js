@@ -9,7 +9,7 @@ function deteleAuth(req, res, next) {
         if (token) {
             jwt.verify(token, process.env.secretKey, function (err, decoded) {
                 if (decoded.role == "admin") {
-                    next()
+                    next();
                 } else {
                     res.status(409).json({ message: "access failed, only users who are administrators can access" });
                 }

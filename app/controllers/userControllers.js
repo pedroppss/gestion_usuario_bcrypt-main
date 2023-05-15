@@ -69,15 +69,15 @@ const findAll = async (req, res) => {
         err.message || "An error occurred while retrieving users."
     });
   });
-  res.send(result);
+  res.status(201).json({result,status: "success", message: "Authorized success"});
 
 };
 const deleteusers = async (req,res) => {
   try{
-  const userName = req.body;
+  const userName = req.query;
   await User.destroy({
     where:{
-      userName:req.body.userName
+      userName:req.query.userName
     }
   }).then(num =>{
     if (num == 1) {
