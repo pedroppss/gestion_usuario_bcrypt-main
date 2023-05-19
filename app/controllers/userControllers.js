@@ -81,7 +81,7 @@ const deleteusers = async (req,res) => {
     }
   }).then(num =>{
     if (num == 1) {
-      res.status(201).json({message: "The department was successfully deleted"});
+      res.status(201).json({message: "The user was successfully deleted"});
     } else {
       res.status(409).json({message: "could not be deleted because the user does not exist"});
     }

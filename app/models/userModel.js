@@ -6,9 +6,6 @@
  * @property {string} role.required
 */
 
-
-
-
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("user", {
         userName: {
