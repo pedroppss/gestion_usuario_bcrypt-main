@@ -1,6 +1,6 @@
 /** 
  * @typedef user,
- * @property {string} userName.required
+ * @property {string} name.required
  * @property {string} email.required
  * @property {string} password.required
  * @property {string} role.required
@@ -11,7 +11,7 @@
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("user", {
-        userName: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false,
             
