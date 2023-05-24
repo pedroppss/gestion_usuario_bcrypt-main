@@ -2,7 +2,7 @@
  * @route POST /users/register
  * @group users - Operations about user
  * @produces application/json
- * @param {user.model} user.body.required -userName(user name), password, email, role
+ * @param {user.model} user.body.required -name(user name), password, email, role
  * @returns {Error} default - error creating user
  * @returns {success:true,message="user created successfully"} 201  
 */
@@ -10,7 +10,7 @@
  * @route POST /users/login
  * @group users - Operations about user
  * @produces application/json
- * @param {user.model} user.body.required - userName and password
+ * @param {user.model} user.body.required - name and password
  * @returns {Error} default -Unexpected error
  * @returns {success:true,message="Authentication success"} 201
 */
@@ -31,6 +31,23 @@
  * @returns {Error} default -Invalid Token, not Authorized
  * @returns {success:true, message="access granted"} 201
 */
+/**
+ * @route POST /users/requestPasswordChanged
+ * @group users -Operations about user
+ * @produces application/json
+ * @param {user.model} user.body.required -name and email
+ * @returns {Error} default - error message sent
+ * @returns {success:true,message="Message sent"} 201
+ */
+/**
+ * @route POST /users/restorePassword/{token}
+ * @group users -Operations about user
+ * @produces application/json
+ * @param {string} token.path.required -Enter token
+ * @param {user.model} user.body.required -name , email, new password
+ * @returns {Error} default 
+ * @returns {success:true, message="password updated succesfully"} 201
+ */
 const express = require('express')
 const userController = require('../controllers/userControllers.js')
 const { signup, login, findAll, deleteusers, login_email,restorePassword } = userController
